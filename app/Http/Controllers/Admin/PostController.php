@@ -98,7 +98,7 @@ class PostController extends Controller
         if (array_key_exists('tags', $data));
         $post->tags()->attach($data['tags']);
 
-        // creato il post invio una mail all'admin
+        // creato il post invio una mail all'admin.
         $mail = new PostPublicationMail();
         $receiver = 'admin@boolpress.com';
         Mail::to($receiver)->send($mail);
