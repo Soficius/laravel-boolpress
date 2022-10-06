@@ -54,7 +54,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|min:5|max:50|unique:posts',
             'content' => 'required|string',
-            'image' => 'nullable|image|mines:jpeg,jpg,png',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png',
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|exists:tags,id',
 
@@ -66,7 +66,7 @@ class PostController extends Controller
             'title.max' => ' il titolo deve avere :max caratteri',
             'title.unique' => ' titolo già presente',
             'image.image' => 'file non valido',
-            'image.mines' => 'formati ammessi: jpeg,jpg,png',
+            'image.mimes' => 'formati ammessi: jpeg,jpg,png',
             'category_id.exists' => 'Nessuna categoria associata',
             'tags.exists' => 'Nessun tag selezionato',
         ]);
