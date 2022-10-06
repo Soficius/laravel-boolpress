@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\PostPublicationMail;
 
 
 class PostController extends Controller
@@ -95,6 +97,11 @@ class PostController extends Controller
         // faccio l'if per controllare se esiste la chiave di tags per poi attacarla, altrimenti il programma si spacca perchè se non gli arriva nulla non può attaccare nulla.
         if (array_key_exists('tags', $data));
         $post->tags()->attach($data['tags']);
+
+        // creato il post invio una mail all'admin
+        $mail = new PostPublicationMail();
+        $receiver = 'admin@boolpress.com';
+        Mail::to($receiver)->send($mail);
 
         return redirect()->route('admin.posts.show', $post)
             ->with('message', 'Post creato con successo')
