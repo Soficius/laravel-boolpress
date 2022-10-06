@@ -99,7 +99,7 @@ class PostController extends Controller
         $post->tags()->attach($data['tags']);
 
         // creato il post invio una mail all'admin.
-        $mail = new PostPublicationMail();
+        $mail = new PostPublicationMail($post);
         $receiver = 'admin@boolpress.com';
         Mail::to($receiver)->send($mail);
 
