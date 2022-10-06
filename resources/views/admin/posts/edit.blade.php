@@ -3,14 +3,23 @@
     <header>
         <h1 class="text-center">Modifica post</h1>
     </header>
+    @if ($errors->any())
+        <div class="alert alert-danger container">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <main class="container">
         <form action="{{ route('admin.posts.update', $post) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
                 <label for="title">title</label>
-                <input type="text" class="form-control" id="title" placeholder="title" name="title"
-                    value="{{ $post->title }}">
+                <input type="text" class="form-control" id="title" placeholder="title" name="title" maxlength="50"
+                    minlength="5" value="{{ $post->title }}">
             </div>
             <div class="form-group">
                 <label for="url "> URL del image: </label>

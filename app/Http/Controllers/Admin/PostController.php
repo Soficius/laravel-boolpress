@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -20,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('updated_at', 'DESC')->orderBy('created_at', 'DESC')->get();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -47,6 +48,28 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        //TODO validazione
+        $request->validate([
+            'title' => 'required|string|min:5|max:50|unique:posts',
+            'content' => 'required|string',
+            'image' => 'nullable|url',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id',
+
+        ], [
+            'title.required' => ' il titolo è obbligatorio',
+            'content.required' => 'contenuto vuoto',
+            'title.min' => ' il titolo deve avere :min caratteri',
+            'title.max' => ' il titolo deve avere :max caratteri',
+            'title.unique' => ' titolo già presente',
+            'image.url' => 'url dell\immagine non valido',
+            'category_id.exists' => 'Nessuna categoria associata',
+            'tags.exists' => 'Nessun tag selezionato',
+        ]);
+
+
+
+
         $data = $request->all();
         $post = new Post();
         $post->fill($data);
@@ -100,20 +123,43 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        $post = Post::findOrFail($id);
+        //TODO validazione
+        $request->validate([
+            'title' => ['required', 'string', 'min:5', 'max:50', Rule::unique('posts')->ignore($post->id)],
+            'content' => 'required|string',
+            'image' => 'nullable|url',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id',
+        ], [
+            'title.required' => ' il titolo è obbligatorio',
+            'content.required' => 'contenuto vuoto',
+            'title.min' => ' il titolo deve avere :min caratteri',
+            'title.max' => ' il titolo deve avere :max caratteri',
+            'title.unique' => ' titolo già presente',
+            'image.url' => 'url dell\immagine non valido',
+            'category_id.exists' => 'Nessuna categoria associata',
+            'tags.exists' => ' tag non valido',
+        ]);
+        // prendo tutti i campi del form
         $data = $request->all();
+
+        // riempio data con lo slug
+        $data['slug'] = Str::slug($request->title, '-');
+        // update fa fill e save quindi non devo scrivere il save
+        $post->update($data);
+
+
         $post->fill($data);
 
         // fatto per far si che se diseleziono i checkbox il programma non vada in errore
-        if (array_key_exists('tags', $data)) {
-            $post->tags()->sync($data['tags']);
-        } else {
-            $post->tags()->detach();
-        }
+        if (array_key_exists('tags', $data))  $post->tags()->detach();
+        else $post->tags()->sync($data['tags']);
+
         $post->save();
-        return redirect()->route('admin.posts.show', $post);
+        return redirect()->route('admin.posts.show', $post)->with('message', 'Post Modificato con successo')
+            ->with('type', 'success');;
     }
 
     /**

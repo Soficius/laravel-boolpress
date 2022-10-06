@@ -55,8 +55,8 @@
                         @endif
                     </td>
                     <td>{{ $post->slug }}</td>
-                    <td>{{ $post->created_at }}</td>
-                    <td>{{ $post->updated_at }}</td>
+                    <td>{{ $post->getCreatedAt() }}</td>
+                    <td>{{ $post->getFormattedDate('updated_at') }}</td>
                     <td class="d-flex">
                         <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-primary mr-4">Vedi</a>
                         <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-warning mr-4">Modifica</a>

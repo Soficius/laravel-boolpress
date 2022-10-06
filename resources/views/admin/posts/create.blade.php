@@ -3,13 +3,22 @@
     <header>
         <h1 class="text-center">Crea un nuovo post</h1>
     </header>
+    @if ($errors->any())
+        <div class="alert alert-danger container">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <main class="container">
         <form action="{{ route('admin.posts.store') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="title">title</label>
-                <input type="text" class="form-control" id="title" placeholder="title" name="title" required
-                    value="{{ old('title') }}">
+                <input type="text" class="form-control" id="title" placeholder="title" name="title" maxlength="50"
+                    minlength="5" value="{{ old('title') }}">
             </div>
             <div class="form-group">
                 <label for="url "> URL del image: </label>
@@ -18,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label for="contenut">contenuto</label>
-                <textarea class="form-control" id="contenut" rows="3" name="content" required>{{ old('content') }}</textarea>
+                <textarea class="form-control" id="contenut" rows="3" name="content">{{ old('content') }}</textarea>
             </div>
             <div class="form-group">
                 <label for="category_id">Categoria</label>
