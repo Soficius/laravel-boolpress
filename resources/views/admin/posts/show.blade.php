@@ -12,7 +12,8 @@
         <div class="card mb-3" style="max-width: 540px; min-width: 800px">
             <div class="row no-gutters">
                 <div class="col-md-4">
-                    <img src="{{ $post->image }}" alt="{{ $post->title }}" class="w-100 h-100">
+                    {{-- utilizzo asset per da public prendere la il file all'interno di storage/posts --}}
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-100 h-100">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">

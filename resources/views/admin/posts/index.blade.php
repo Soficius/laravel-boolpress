@@ -29,7 +29,7 @@
             @forelse ($posts as $post)
                 <tr>
                     <th scope="row">{{ $post->id }}</th>
-                    <td> <img src="{{ $post->image }}" alt="" class="img-fluid"></td>
+                    <td> <img src="{{ asset('storage/' . $post->image) }}" alt="" class="img-fluid"></td>
                     <td>
                         @forelse ($post->tags as $tag)
                             <span>{{ $tag->label }}</span>

@@ -13,7 +13,7 @@
         </div>
     @endif
     <main class="container">
-        <form action="{{ route('admin.posts.update', $post) }}" method="POST">
+        <form action="{{ route('admin.posts.update', $post) }}" enctype="multipart/form-data" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -22,9 +22,8 @@
                     minlength="5" value="{{ $post->title }}">
             </div>
             <div class="form-group">
-                <label for="url "> URL del image: </label>
-                <input type="url" name="image" class="form-control" id="url" placeholder="URL del comic"
-                    value="{{ $post->image }}">
+                <label for="file"> URL del image: </label>
+                <input type="file" name="image" class="d-flex" id="url">
             </div>
             <div class="form-group">
                 <label for="contenut">contenuto</label>

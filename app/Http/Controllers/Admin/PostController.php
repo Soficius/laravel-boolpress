@@ -142,7 +142,7 @@ class PostController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'min:5', 'max:50', Rule::unique('posts')->ignore($post->id)],
             'content' => 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png',
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|exists:tags,id',
         ], [
@@ -151,7 +151,8 @@ class PostController extends Controller
             'title.min' => ' il titolo deve avere :min caratteri',
             'title.max' => ' il titolo deve avere :max caratteri',
             'title.unique' => ' titolo già presente',
-            'image.url' => 'url dell\immagine non valido',
+            'image.image' => 'file non valido',
+            'image.mimes' => 'formati ammessi: jpeg,jpg,png',
             'category_id.exists' => 'Nessuna categoria associata',
             'tags.exists' => ' tag non valido',
         ]);
@@ -160,6 +161,17 @@ class PostController extends Controller
 
         // riempio data con lo slug
         $data['slug'] = Str::slug($request->title, '-');
+
+
+        if (array_key_exists('image', $data)) {
+            // se mi arriva devo salvarla in storage/app/public
+            // il primo parametro di storage è il file dove salvare il file.
+            // Se non si inserisce niente viene salvata di default in 'storage/app/public'
+            // se assegno a storage put una varibiale dentro di essa mi restituirù un link al percorso a cui è stata salvata l'immagine
+
+            $image_url = Storage::put('posts', $data['image']);
+            $post->image = $image_url;
+        }
         // update fa fill e save quindi non devo scrivere il save
         $post->update($data);
 
