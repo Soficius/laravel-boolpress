@@ -168,7 +168,8 @@ class PostController extends Controller
             // il primo parametro di storage è il file dove salvare il file.
             // Se non si inserisce niente viene salvata di default in 'storage/app/public'
             // se assegno a storage put una varibiale dentro di essa mi restituirù un link al percorso a cui è stata salvata l'immagine
-
+            // ? nel update faccio questo ulteriore controllo per cancellare una file che viene ricaricato e c'è già nel db
+            if ($post->image) Storage::delete($post->image);
             $image_url = Storage::put('posts', $data['image']);
             $post->image = $image_url;
         }
@@ -195,6 +196,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // una volta cancellato il post faccio si che anche l'immagine sparisca dal db
+        if ($post->image) Storage::delete($post->image);
         // faccio la condizione per contare se il post ha dei tags per toglierli e poi eliminare il post
         if (count($post->tags)) $post->tags()->detach();
         $post->delete();
