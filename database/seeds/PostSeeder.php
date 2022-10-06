@@ -31,7 +31,7 @@ class PostSeeder extends Seeder
             $new_post->category_id = Arr::random($category_ids);
             $new_post->slug = Str::slug($new_post->title, '-');
             $new_post->content = $faker->paragraph(2, true);
-            $new_post->image = $faker->imageUrl(100, 100);
+            // $new_post->image = $faker->imageUrl(100, 100);
             $new_post->save();
 
             // randomizzare i tag

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostController extends Controller
@@ -48,13 +49,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
         //TODO validazione
         $request->validate([
             'title' => 'required|string|min:5|max:50|unique:posts',
             'content' => 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mines:jpeg,jpg,png',
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|exists:tags,id',
+
 
         ], [
             'title.required' => ' il titolo è obbligatorio',
@@ -62,13 +65,11 @@ class PostController extends Controller
             'title.min' => ' il titolo deve avere :min caratteri',
             'title.max' => ' il titolo deve avere :max caratteri',
             'title.unique' => ' titolo già presente',
-            'image.url' => 'url dell\immagine non valido',
+            'image.image' => 'file non valido',
+            'image.mines' => 'formati ammessi: jpeg,jpg,png',
             'category_id.exists' => 'Nessuna categoria associata',
             'tags.exists' => 'Nessun tag selezionato',
         ]);
-
-
-
 
         $data = $request->all();
         $post = new Post();
@@ -76,7 +77,19 @@ class PostController extends Controller
         $post->slug = Str::slug($post->title, '-');
         // collego l'utento collegato al post
         $post->user_id = Auth::id();
+
+        // controllo se mi arriva la chiave image.
+        if (array_key_exists('image', $data)) {
+            // se mi arriva devo salvarla in storage/app/public
+            // il primo parametro di storage è il file dove salvare il file.
+            // Se non si inserisce niente viene salvata di default in 'storage/app/public'
+            // se assegno a storage put una varibiale dentro di essa mi restituirù un link al percorso a cui è stata salvata l'immagine
+
+            $image_url = Storage::put('posts', $data['image']);
+            $post->image = $image_url;
+        }
         $post->save();
+
         // collego i tag al post dopo che il post è stato salvato altrimenti non posso associare l'id del post al tag.
         // se non metto le parentesi dopo tags chiamo tutti i tags, invece cosi facendo chiamo solo la relazione.
         // faccio l'if per controllare se esiste la chiave di tags per poi attacarla, altrimenti il programma si spacca perchè se non gli arriva nulla non può attaccare nulla.

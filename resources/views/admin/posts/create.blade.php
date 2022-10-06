@@ -13,7 +13,7 @@
         </div>
     @endif
     <main class="container">
-        <form action="{{ route('admin.posts.store') }}" method="POST">
+        <form action="{{ route('admin.posts.store') }}" enctype="multipart/form-data" method="POST">
             @csrf
             <div class="form-group">
                 <label for="title">title</label>
@@ -21,9 +21,8 @@
                     minlength="5" value="{{ old('title') }}">
             </div>
             <div class="form-group">
-                <label for="url "> URL del image: </label>
-                <input type="url" name="image" class="form-control" id="url" placeholder="URL del comic"
-                    value="{{ old('image') }}">
+                <label for="file"> URL del image: </label>
+                <input type="file" name="image" class="d-flex" id="url">
             </div>
             <div class="form-group">
                 <label for="contenut">contenuto</label>

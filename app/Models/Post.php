@@ -9,7 +9,7 @@ class Post extends Model
 {
     private $default_format = 'd-m-Y H:i:s';
 
-    protected $fillable = ['title', 'image', 'content', 'category_id', 'slug'];
+    protected $fillable = ['title', 'content', 'category_id', 'slug'];
     // creiamo la relazione con category
     public function category()
     {
