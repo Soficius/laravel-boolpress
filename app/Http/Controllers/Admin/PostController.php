@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Category;
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -100,8 +101,12 @@ class PostController extends Controller
 
         // creato il post invio una mail all'admin.
         $mail = new PostPublicationMail($post);
-        $receiver = 'admin@boolpress.com';
-        Mail::to($receiver)->send($mail);
+        // invio la mail di pubblicazione di un post a tutti gli utenti
+        $receivers = User::where('id', '<>', $post->user_id)->limit(4)->pluck('email')->toArray();
+
+        foreach ($receivers as $receiver) {
+            Mail::to($receiver)->send($mail);
+        };
 
         return redirect()->route('admin.posts.show', $post)
             ->with('message', 'Post creato con successo')
