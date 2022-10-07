@@ -16,7 +16,7 @@
                         </p> -->
                         <p>Creato il<time> {{ formatedData }} </time></p>
                         <p>Modificato il<time> {{ formatedData }} </time> </p>
-                        <router-link class="btn btn-primary" :to="{name:'post-detail', params:{id: post.id} }">Vedi</router-link>
+                        <router-link class="btn btn-primary" :to="{name:'post-detail', params:{slug: post.slug} }">Vedi</router-link>
                     </div>
                 </div>
             </div>

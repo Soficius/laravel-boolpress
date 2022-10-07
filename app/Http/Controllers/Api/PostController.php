@@ -33,12 +33,13 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $post = Post::with('category', 'tags', 'user')->find($id);
+        // pre chimare il post con slug non posso usare find che è fatto per cercare gli id, ma devo utlizzare where.
+        $post = Post::with('category', 'tags', 'user')->where('slug', $slug)->first();
 
         // faccio la funzione per far si che se chiamo un id che non ho mi appaia a schermo quello che trovo a schermo. per questa ragione uso il metodo Find e non find or fail
         if (!$post) return response('Not Found', 404);

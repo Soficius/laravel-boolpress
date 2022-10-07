@@ -23,7 +23,7 @@ const routes = new VueRouter({
         { path: '/contacts', component: Contacts, name: 'contacts' },
 
         // con questa rotta mostro il singolo post. id è il parametro dinamico
-        { path: '/posts/:id', component: PostDetail, name: 'post-detail' },
+        { path: '/posts/:slug', component: PostDetail, name: 'post-detail' },
     ]
 });
 

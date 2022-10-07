@@ -2040,7 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.isLoading = true; // prendiamo il post cliccato
 
-      axios.get("http://localhost:8000/api/posts/" + this.$route.params.id).then(function (res) {
+      axios.get("http://localhost:8000/api/posts/" + this.$route.params.slug).then(function (res) {
         _this.post = res.data;
       })["catch"](function (err) {
         console.log(err);
@@ -2451,7 +2451,7 @@ var render = function render() {
       to: {
         name: "post-detail",
         params: {
-          id: _vm.post.id
+          slug: _vm.post.slug
         }
       }
     }
@@ -54639,7 +54639,7 @@ var routes = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     name: 'contacts'
   }, // con questa rotta mostro il singolo post. id è il parametro dinamico
   {
-    path: '/posts/:id',
+    path: '/posts/:slug',
     component: _components_pages_PostDetail_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     name: 'post-detail'
   }]
@@ -54656,7 +54656,7 @@ var routes = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\sofia\Downloads\laravel-api-master\resources\js\front.js */"./resources/js/front.js");
+module.exports = __webpack_require__(/*! C:\laravel\laravel-api-master\resources\js\front.js */"./resources/js/front.js");
 
 
 /***/ })

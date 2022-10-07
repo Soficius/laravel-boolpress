@@ -25,7 +25,7 @@ export default {
         fetchPost() {
             this.isLoading = true
             // prendiamo il post cliccato
-            axios.get("http://localhost:8000/api/posts/" + this.$route.params.id).then((res) => {
+            axios.get("http://localhost:8000/api/posts/" + this.$route.params.slug).then((res) => {
                 this.post = res.data;
             })
                 .catch((err) => {
